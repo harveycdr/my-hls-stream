@@ -24,7 +24,7 @@ def get_url_m3u8(url_motchill):
     #call 1
     a = requests.get(url_motchill, headers=headers)
     if not a.ok:
-        return None, None
+        return None
     soup = BeautifulSoup(a.text,"html.parser")
     a = soup.find("a", class_="streaming-server btn-sv btn-hls btn btn-primary")
     print(a["data-link"])
@@ -32,17 +32,18 @@ def get_url_m3u8(url_motchill):
     
     b = requests.get(a["data-link"], headers=headers)
     if not b.ok:
-        return None, None
+        return None
     c = b.text.split()[2]
-    head_url = a["data-link"].replace("index.m3u8", "")
-    return head_url, c
+    m3u8 = a["data-link"].replace("index.m3u8", "") + c
+    return m3u8
 
-head_url, c = get_url_m3u8(url_motchill)
-if head_url:
-    print(head_url, c)
-    a = requests.get(head_url+c, headers=headers)
+m3u8 = get_url_m3u8(url_motchill)
+if m3u8:
+    print(m3u8)
+    a = requests.get(m3u8, headers=headers)
     if a.ok:
-        make_m3u8(a.text, head_url,"index.m3u8")
+        head_url = m3u8.replace("index.m3u8", "")
+        make_m3u8(a.text, head_url, "index.m3u8")
     
 else:
     print("Không tìm thấy url m3u8")
