@@ -1,7 +1,13 @@
 def make_m3u8(m3u8_raw, head_url, filename):
     new_lines = []
+    ls = m3u8_raw.split()
+    ads = "314e0b390716cd1d898aa6cda212f5d9"
+    length = len(ls)
+    for j in range(length):
+        i = ls[j]
+        if (length > j + 1 and ads in ls[j + 1]) or ads in ls[j]:
+            continue
 
-    for i in m3u8_raw.split():
         if len(i) > 0 and i[0] != "#":
             new_lines.append(head_url + i)
             continue
@@ -37,13 +43,15 @@ def get_url_m3u8(url_motchill):
     m3u8 = a["data-link"].replace("index.m3u8", "") + c
     return m3u8
 
+file_m3u8 = f"{url_motchill.split('/')[4]}.m3u8"
+
 m3u8 = get_url_m3u8(url_motchill)
 if m3u8:
     print(m3u8)
     a = requests.get(m3u8, headers=headers)
     if a.ok:
         head_url = m3u8.replace("index.m3u8", "")
-        make_m3u8(a.text, head_url, "index.m3u8")
+        make_m3u8(a.text, head_url, file_m3u8)
     
 else:
     print("Không tìm thấy url m3u8")

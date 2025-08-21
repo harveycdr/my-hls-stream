@@ -1,11 +1,14 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import MovieDetail from "./pages/MovieDetail";
 
-function App() {
+export default function App() {
   return (
-    <div className="bg-pink-50 min-h-screen">
-      <Home />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movie/:id" element={<MovieDetail />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
